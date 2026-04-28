@@ -1,0 +1,26 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: default-deny
+spec:
+  endpointSelector: {}
+  ingress: []
+  egress: []
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: monitor-only-gateway
+spec:
+  endpointSelector:
+    matchLabels:
+      app: monitor
+
+  ingress:
+    - fromEntities:
+        - ingress
+
+      toPorts:
+        - ports:
+            - port: "8000"
+              protocol: TCP

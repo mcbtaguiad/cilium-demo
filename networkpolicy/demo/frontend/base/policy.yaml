@@ -1,0 +1,26 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: default-deny
+spec:
+  endpointSelector: {}
+  ingress: []
+  egress: []
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: frontend-only-gateway
+spec:
+  endpointSelector:
+    matchLabels:
+      app: frontend
+
+  ingress:
+    - fromEntities:
+        - ingress
+
+      toPorts:
+        - ports:
+            - port: "80"
+              protocol: TCP

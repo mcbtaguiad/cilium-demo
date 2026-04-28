@@ -1,0 +1,45 @@
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: default-deny
+spec:
+  endpointSelector: {}
+  ingress: []
+  egress: []
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-gateway-to-backend
+  namespace: backend
+spec:
+  endpointSelector:
+    matchLabels:
+      app: backend
+
+  ingress:
+    - fromEntities:
+        - ingress
+
+      toPorts:
+        - ports:
+            - port: "3000"
+              protocol: TCP
+          rules:
+            http:
+              - method: "GET"
+                path: "/api"
+              - method: "POST"
+                path: "/api/register"
+              - method: "POST"
+                path: "/api/login"
+              - method: "GET"
+                path: "/api/profile"
+              - method: "GET"
+                path: "/api/version"
+              - method: "GET"
+                path: "/api/users"
+              - method: "PUT"
+                path: "/api/users"
+              - method: "DELETE"
+                path: "/api/users"
